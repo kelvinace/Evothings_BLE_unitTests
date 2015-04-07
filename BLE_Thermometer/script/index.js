@@ -40,7 +40,7 @@ $(document).ready(function() {
 function onReady() {
     log("BLE ready");
 
-    scan(AndroidUuid, function(deviceInfo) {
+    scan(iOSUuid, function(deviceInfo) {
         log("found device: " + deviceInfo.name);
         assert(deviceInfo.name === 'Therm');
 
