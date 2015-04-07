@@ -108,10 +108,12 @@ function serviceDiscovery(callbackFn) {
     var serviceMap = [];
     evothings.ble.readAllServiceData(deviceHandle, function(services) {
         services.forEach(function(serviceInfo) {
+            // log("serviceInfo.uuid " + serviceInfo.uuid);
             var serviceEntry = [];
             serviceEntry['info']            = serviceInfo;
             serviceEntry['characteristics'] = [];
             serviceInfo.characteristics.forEach(function(characteristicInfo) {
+                // log("serviceDiscovery: characteristics UUID: " + characteristicInfo.uuid);
                 var characteristicEntry = [];
                 characteristicEntry['info'] = characteristicInfo;
                 serviceEntry['characteristics'][characteristicInfo.uuid] = characteristicEntry;
