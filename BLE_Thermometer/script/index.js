@@ -54,15 +54,46 @@ function onConnect() {
 }
 
 function onServiceDiscovery(serviceMap) {
-    // log("count = " + serviceMap.length);
+    // log("onScanDiscovery");
 
-    assert(serviceMap['00001809-0000-1000-8000-00805f9b34fb']);
-    assert(serviceMap['00001801-0000-1000-8000-00805f9b34fb']);
-    assert(serviceMap['00001800-0000-1000-8000-00805f9b34fb']);
-    log("done");
-    // serviceMap.forEach(function(serviceEntry) {
-    //     log("uuid: " + serviceEntry.uuid);
-    // });
+    // ensure all expected services are present
+    assert(Object.keys(serviceMap).length <= 3); /* we could have the GAP and GATT services getting discovered as well. */
+    // assert(serviceMap['00001800-0000-1000-8000-00805f9b34fb']); /* GAP service */
+    // assert(serviceMap['00001801-0000-1000-8000-00805f9b34fb']); /* GATT service */
+    assert(serviceMap['00001809-0000-1000-8000-00805f9b34fb']); /* health thermometer */
+    log("found health thermometer service");
+
+    // ensure the makeup of the HealthThermometer service
+    var serviceEntry = serviceMap['00001809-0000-1000-8000-00805f9b34fb'];
+    assert(Object.keys(serviceEntry['characteristics']).length == 2);
+    assert(serviceEntry['characteristics']['00002a1c-0000-1000-8000-00805f9b34fb']);
+    log("found temperature measurement characteristic");
+    assert(serviceEntry['characteristics']['00002a1d-0000-1000-8000-00805f9b34fb']);
+    log("found temperature type characteristic");
+
+    // attempt to read from the temperature-measurement characterisitc from the health-thermometer service
+    var temperatureMeasurementCharInfo = serviceEntry['characteristics']['00002a1c-0000-1000-8000-00805f9b34fb']['info'];
+    evothings.ble.readCharacteristic(deviceHandle, temperatureMeasurementCharInfo.handle, function(data) {
+        log('able to read temperature');
+    }, onError);
+
+    // enable notifications on the characteristic
+    evothings.ble.enableNotification(deviceHandle, temperatureMeasurementCharInfo.handle, function(data) {
+        log('received notification data from temperature');
+    }, onError);
+
+    // disable notifications based on a timeout.
+    setTimeout(function() {
+        evothings.ble.disableNotification(deviceHandle, temperatureMeasurementCharInfo.handle, function(data) {
+            log('disabled notification for temperature');
+        }, onError);
+    }, 2000);
+
+    // end the test
+    setTimeout(function() {
+        disconnect();
+        log('end');
+    }, 3000);
 }
 
 function onDisconnect() {
