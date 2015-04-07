@@ -1,10 +1,11 @@
 // Use reference here:
 // https://github.com/evothings/cordova-ble/blob/master/ble.js
 
-// iOS style address
-var iOSUuid = "9A8C";
-// Android style address
-var AndroidUuid = "FC:18:80:C7:F6:29";
+// You'll need to update the following based on the target device. device UUID
+// may be discovered on iOS using 'lightBlue', or on Android using 'nRF Master
+// Control Panel'.
+var iOSUuid = "9A8C";                  // iOS style address
+var AndroidUuid = "FC:18:80:C7:F6:29"; // Android style address
 
 // Device handle
 var deviceHandle = null;
