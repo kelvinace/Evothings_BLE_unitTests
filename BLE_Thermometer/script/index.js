@@ -2,7 +2,7 @@
 // https://github.com/evothings/cordova-ble/blob/master/ble.js
 
 // iOS style address
-var iOSUuid = "47C7";
+var iOSUuid = "9A8C";
 // Android style address
 var AndroidUuid = "FC:18:80:C7:F6:29";
 
