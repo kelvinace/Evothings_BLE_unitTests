@@ -42,7 +42,7 @@ function onReady() {
 
     scan(iOSUuid, function(deviceInfo) {
         log("found device: " + deviceInfo.name);
-        assert(deviceInfo.name.indexOf('HRM') == 0);
+        // assert(deviceInfo.name.indexOf('HRM') == 0);
 
         connect(deviceInfo.address);
     });
